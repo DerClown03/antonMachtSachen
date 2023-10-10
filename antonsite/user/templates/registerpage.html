@@ -1,0 +1,13 @@
+
+<h3 class="center">Registriere dich hier</h3>
+<div id="register_table">
+<form  class="center" method="POST" action="" hx-post=" {% url 'signup' %} " hx-target="#register_table" hx-select="#register_table" hx-swap="innerHTML">
+    {% csrf_token %}
+    {{ form }}
+   
+  <input type="submit" class="btn-main | btn-registerpage" name="Create User">
+</form>
+</div>
+
+
+

@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
+    </head>
+    <body>
+        <div class="flex">
+            <form action="">
+                <input class="searchbar" name="search_query" placeholder="Suchen..."/>
+                <input type="submit" value="Suchen"/>
+            </form>
+            {% for i in object_list %}
+            <div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <ul>
+                        <li><input type="image" src="{{i.item_img.url}}" alt="{{i.item_name}}"></li>
+                        <li><input type="number" name="amount_query"/><input type="submit"></li>
+                        <input type="hidden" name="item_name" value="{{i.item_name}}">
+                    </ul>
+                </form>
+            </div>
+            {% endfor %}
+            {% if page_obj.has_previous %}
+<a href="{% url 'index'%}?page={{page_obj.previous_page_number}}">Vorherige Seite</a>
+ {% endif %}
+
+ {% if page_obj.has_next %}
+<a href="{% url 'index'%}?page={{page_obj.next_page_number}}">Nächste Seite</a>
+{% endif%}
+        </div>   
+    </body>
+</html>

@@ -1,0 +1,9 @@
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+.flex ul {
+    list-style: none;
+}

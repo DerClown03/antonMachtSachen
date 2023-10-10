@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
+    </head>
+    <body>
+        <div class="flex"> 
+            {% for i in object_list %}
+                <div>
+                    <form method="get">
+                        {% csrf_token %}
+                        <ul>
+                            <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
+                            {% for input in i.recipe_input_items.all %}
+                             <li>Input amount: {{input.item_name}} {{input.amount}}/min</li>
+                             {%endfor%}
+                             {% for output in i.recipe_output_items.all %}
+                             <li>Output amount: {{output.item_name}} {{output.amount}}/min</li>
+                             {%endfor%}
+                            <li>{{i.normal_recipe}}</li>
+                        </ul>
+                        <input type="hidden" name="recipe_id" value="{{i.id}}">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>
