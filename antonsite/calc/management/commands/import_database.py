@@ -14,6 +14,10 @@ class Command(BaseCommand):
         return True
 
 
+    def make_string_readable(item_name: str):
+        return item_name.replace('_', ' ').title()
+
+
     def handle(self, *args, **kwargs):
         recipe_path = Path(__file__).parent.parent.parent / 'recipes'
         image_path = Path(__file__).parent.parent.parent / 'old_database/machines'
@@ -33,11 +37,13 @@ class Command(BaseCommand):
 
                     for i in range(0, input_count * 2, 2):
                         item = spliters[i + 3]
+                        item_readable = self.make_string_readable(spliters[i + 3])
                         amount = spliters[i + 4]
-                        input_model = models.InputModel.objects.create(recipe=recipe_model, item_name=item, amount=amount)
+                        input_model = models.InputModel.objects.create(recipe=recipe_model, item_name=item, amount=amount, item_name_readable=item_readable)
 
                     for i in range(0, output_count * 2, 2):
                         item = spliters[i + (2 * input_count) + 4]
+                        item_readable = self.make_string_readable(spliters[i + (2 * input_count) + 4])
                         amount = spliters[i + (2 * input_count) + 5]
-                        output_model = models.OutputModel.objects.create(recipe=recipe_model, item_name=item, amount=amount)
+                        output_model = models.OutputModel.objects.create(recipe=recipe_model, item_name=item, amount=amount, item_name_readable=item_readable)
  
