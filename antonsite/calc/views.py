@@ -42,7 +42,6 @@ class RecipeView(generic.ListView):
     model = models.RecipeModel
     template_name = "detail_view.html"
     stack: dict[str, list[StackObject]] = {"User": []}
-    last_searched_object: StackObject = None
 
     all_needed_machines: dict[str, Decimal] = {}
     all_needed_recipes_in_machines: dict[str, Decimal] = {}
