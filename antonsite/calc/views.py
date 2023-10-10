@@ -6,9 +6,9 @@ from . import models
 from decimal import Decimal
 from django.urls import reverse_lazy
 
-#pemis
+
 defaultResources: list[str] = [ "limestone", "iron_ore", "copper_ore", "caterium_ore", "coal", "raw_quartz", "sulfur", "bauxit", "uranium", "water", "crude_oil", "nitrogen_gas", "uranium_waste" ]
-pemis
+
 
 class ItemView(generic.ListView):
     model = models.ItemModel
