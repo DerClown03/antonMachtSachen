@@ -14,7 +14,7 @@ class Command(BaseCommand):
         return True
 
 
-    def make_string_readable(item_name: str):
+    def make_string_readable(self, item_name: str):
         return item_name.replace('_', ' ').title()
 
 
@@ -23,7 +23,7 @@ class Command(BaseCommand):
         image_path = Path(__file__).parent.parent.parent / 'old_database/machines'
         for machine in machines:
             image = File(open(f"{image_path}/{machine}.png", 'rb'), name=f"{machine}.png")
-            machine_model = models.MachineModel.objects.create(machine_name=machine, machine_img=image)
+            machine_model = models.MachineModel.objects.create(machine_name=machine, machine_name_readable=self.make_string_readable(machine), machine_img=image)
             machine_file = recipe_path / f'{machine}.txt'
             with open(machine_file) as f:
                 lines = f.readlines()
