@@ -8,8 +8,7 @@
         <div class="flex"> 
             {% for i in object_list %}
                 <div>
-                    <form method="get">
-                        {% csrf_token %}
+                    <form>
                         <ul>
                             <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
                             {% for input in i.recipe_input_items.all %}
