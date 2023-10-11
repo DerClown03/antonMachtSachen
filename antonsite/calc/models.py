@@ -9,8 +9,8 @@ class ItemModel(models.Model):
 
 class MachineModel(models.Model):
     machine_img = models.ImageField(upload_to="static/images/machines")
-    machine_name = models.CharField(max_length=20)
-
+    machine_name = models.CharField(max_length=50)
+    machine_name_readable = models.CharField(max_length=50)
 
 class RecipeModel(models.Model):
     machine = models.ForeignKey(MachineModel, on_delete=models.CASCADE, related_name="recipes")
@@ -22,10 +22,12 @@ class RecipeModel(models.Model):
 class InputModel(models.Model):
     recipe = models.ForeignKey(RecipeModel, on_delete=models.CASCADE, related_name="recipe_input_items")
     item_name = models.CharField(max_length=50)
+    item_name_readable = models.CharField(max_length=50)
     amount = models.DecimalField(decimal_places=10, max_digits=20)
 
 
 class OutputModel(models.Model):
     recipe = models.ForeignKey(RecipeModel, on_delete=models.CASCADE, related_name="recipe_output_items")
     item_name = models.CharField(max_length=50)
+    item_name_readable = models.CharField(max_length=50)
     amount = models.DecimalField(decimal_places=10, max_digits=20)

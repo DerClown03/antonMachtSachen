@@ -32,11 +32,16 @@ class ItemView(generic.ListView):
 class StackObject:
     def __init__(self, name: str, amount: Decimal, diagram_tree_output: str = "", diagram_tree_depth: str = "", first: bool = False, last: bool = False) -> None:
         self.item_name: str = name
+        self.item_name_readable: str = self.make_string_readable(name)
         self.needed_item_amount: Decimal = amount
         self.diagram_tree_output: str = diagram_tree_output
         self.diagram_tree_depth: str = diagram_tree_depth
         self.first_object: bool = first
         self.last_object: bool = last
+
+    def make_string_readable(self, item_name: str):
+        return item_name.replace('_', ' ').title()
+    
 
 class RecipeView(generic.ListView):
     model = models.RecipeModel
@@ -50,47 +55,48 @@ class RecipeView(generic.ListView):
 
     def get_queryset(self):
         recipe_id = self.request.GET.get("recipe_id")
-        recipe_inputs = models.InputModel.objects.filter(recipe=recipe_id)
+        recipe_inputs: models.InputModel = models.InputModel.objects.filter(recipe=recipe_id)
         if self.stack == {"User": []}:
-            first_recipe = True
+            initial_recipe = True
             item_query = self.request.session.get('item_query')
             amount_query = Decimal(self.request.session.get('amount_query'))
             current_searched_item = StackObject(item_query, amount_query)
         else:
-            first_recipe = False
+            initial_recipe = False
             current_searched_item: StackObject = self.stack["User"][-1]
             item_query = current_searched_item.item_name
             amount_query = current_searched_item.needed_item_amount
             self.stack["User"].pop()
         if recipe_id:
-            needed_machines = amount_query / self.get_desired_output(item_query, recipe_id).amount
+            output_amount: Decimal = self.get_desired_output(item_query, recipe_id).amount
+            needed_machines = amount_query / output_amount
             self.stack = self.add_to_stack(recipe_inputs, current_searched_item, needed_machines)
             chosen_recipe: models.RecipeModel = models.RecipeModel.objects.filter(pk=recipe_id)[0]
-            self.save_current_factory_status(current_searched_item, chosen_recipe, needed_machines, item_query , first_recipe)
+            self.save_current_factory_status(current_searched_item, chosen_recipe, needed_machines, item_query, output_amount, initial_recipe)
             if len(self.stack["User"]) == 0:
                 self.print_dict(self.all_needed_machines)
                 self.print_dict(self.all_needed_recipes_in_machines)
                 self.print_dict(self.needed_default_resources)
                 self.print_dict(self.factory_in_diagram)
                 return redirect("result")
-            return models.RecipeModel.objects.filter(recipe_output_items__item_name=self.stack["User"][-1].item_name)
-        return models.RecipeModel.objects.filter(recipe_output_items__item_name=item_query)
+            return models.RecipeModel.objects.filter(recipe_output_items__item_name=self.stack["User"][-1].item_name).order_by('-normal_recipe')
+        return models.RecipeModel.objects.filter(recipe_output_items__item_name=item_query).order_by('-normal_recipe')
 
-    def save_current_factory_status(self, searched_item: StackObject, chosen_recipe: models.RecipeModel, needed_machines, item_query: str, first_recipe: bool) -> None:
-        self.all_needed_machines: dict[str, Decimal] = self.add_or_save_to_dict(self.all_needed_machines, chosen_recipe.machine.machine_name, needed_machines)
-        if first_recipe:
-            self.all_needed_recipes_in_machines: dict[str, Decimal] = self.add_or_save_to_dict(self.all_needed_recipes_in_machines, f"{chosen_recipe.machine.machine_name} for {item_query}", needed_machines)
-            self.factory_in_diagram: dict[str, Decimal] = self.add_or_save_to_dict(self.factory_in_diagram, f"{item_query}", needed_machines)
+    def save_current_factory_status(self, searched_item: StackObject, chosen_recipe: models.RecipeModel, needed_machines, item_query: str, output_ampunt: Decimal, initial_recipe: bool) -> None:
+        self.all_needed_machines: dict[str, Decimal] = self.add_or_save_to_dict(self.all_needed_machines, chosen_recipe.machine.machine_name_readable, needed_machines)
+        if initial_recipe:
+            self.all_needed_recipes_in_machines: dict[str, Decimal] = self.add_or_save_to_dict(self.all_needed_recipes_in_machines, f"{chosen_recipe.machine.machine_name_readable} for {self.make_string_readable(item_query)}", needed_machines)
+            self.factory_in_diagram: dict[str, Decimal] = self.add_or_save_to_dict(self.factory_in_diagram, f"{self.make_string_readable(item_query)} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", needed_machines * output_ampunt)
         else:
-            self.all_needed_recipes_in_machines: dict[str, Decimal] = self.add_or_save_to_dict(self.all_needed_recipes_in_machines, f"{chosen_recipe.machine.machine_name} for {searched_item.item_name}", needed_machines)
-            self.factory_in_diagram: dict[str, Decimal] = self.add_or_save_to_dict(self.factory_in_diagram, f"{searched_item.diagram_tree_output}{searched_item.item_name}", needed_machines)
+            self.all_needed_recipes_in_machines: dict[str, Decimal] = self.add_or_save_to_dict(self.all_needed_recipes_in_machines, f"{chosen_recipe.machine.machine_name_readable} for {searched_item.item_name_readable}", needed_machines)
+            self.factory_in_diagram: dict[str, Decimal] = self.add_or_save_to_dict(self.factory_in_diagram, f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", needed_machines * output_ampunt)
         
     def add_to_stack(self, recipe_inputs: list[models.InputModel], last_searched_object: StackObject, needed_machines: Decimal):
         for index, item in enumerate(recipe_inputs):
             tree_depth: str = last_searched_object.diagram_tree_depth
             tree_output: str = tree_depth
             if item.item_name in defaultResources:
-                self.needed_default_resources = self.add_or_save_to_dict(self.needed_default_resources, item.item_name, item.amount * needed_machines)
+                self.needed_default_resources = self.add_or_save_to_dict(self.needed_default_resources, item.item_name_readable, item.amount * needed_machines)
                 continue
             else:
                 if index == 0:
@@ -122,6 +128,9 @@ class RecipeView(generic.ListView):
             if output.item_name == searched_output_item:
                 return output
         raise RuntimeError("Failed to find desired output item")
+    
+    def make_string_readable(self, item_name: str):
+        return item_name.replace('_', ' ').title()
 
 
 class ResultView(generic.TemplateView):
