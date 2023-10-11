@@ -30,7 +30,7 @@ class ItemView(generic.ListView):
     
 
 class StackObject:
-    def __init__(self, name: str, amount: Decimal, diagram_tree_output: str = "", diagram_tree_depth: str = "", first: bool = False, last: bool = False) -> None:
+    def __init__(self, name: str, amount: float, diagram_tree_output: str = "", diagram_tree_depth: str = "", first: bool = False, last: bool = False) -> None:
         self.item_name: str = name
         self.item_name_readable: str = self.make_string_readable(name)
         self.needed_item_amount: float = amount
@@ -71,7 +71,9 @@ class RecipeView(generic.ListView):
             output_amount: Decimal = self.get_desired_output(item_query, recipe_id).amount
             needed_machines = amount_query / output_amount
             self.stack = self.add_to_stack(recipe_inputs, current_searched_item, needed_machines)
-            print(json.dumps(self.stack_to_session_dict(self.stack["User"]), indent=4))
+            session_dict = self.stack_to_session_dict(self.stack["User"])
+            self.stack = self.session_dict_to_stack(session_dict)
+            print(json.dumps(session_dict, indent=4))
             chosen_recipe: models.RecipeModel = models.RecipeModel.objects.filter(pk=recipe_id)[0]
             self.save_current_factory_status(current_searched_item, chosen_recipe, needed_machines, item_query, output_amount, initial_recipe)
             if len(self.stack["User"]) == 0:
@@ -133,19 +135,33 @@ class RecipeView(generic.ListView):
     def make_string_readable(self, item_name: str):
         return item_name.replace('_', ' ').title()
 
+    def session_dict_to_stack(self, session_dict: dict[int, dict[str, str]]) -> dict[str, list[StackObject]]:
+        stack: dict[str, list[StackObject]] = {"User": []}
+        for index in range(len(session_dict)):
+            stack["User"].append(StackObject(
+                name=session_dict[index]["item_name"],
+                amount=float(session_dict[index]["needed_item_amount"]),
+                diagram_tree_output=session_dict[index]["diagram_tree_output"],
+                diagram_tree_depth=session_dict[index]["diagram_tree_depth"],
+                first=session_dict[index]["first_object"],
+                last=session_dict[index]["last_object"]
+            ))
+        return stack
+    
     def stack_to_session_dict(self, stack: list[StackObject]) -> dict[int, dict[str, str]]:
         session_dict: dict[int, dict[str, str]] = {}
         for index, stack_object in enumerate(stack):
             session_dict[index] = {
                 "item_name": stack_object.item_name,
                 "item_name_readable": stack_object.item_name_readable,
-                "needed_item_amount": float(stack_object.needed_item_amount),
+                "needed_item_amount": float(stack_object.needed_item_amount), # Value type needs to be changed from Decimal to float everywhere
                 "diagram_tree_output": stack_object.diagram_tree_output,
                 "diagram_tree_depth": stack_object.diagram_tree_depth,
                 "first_object": stack_object.first_object,
                 "last_object": stack_object.last_object,
             }
         return session_dict
+    
 
 class ResultView(generic.TemplateView):
     template_name = "result_view.html"
