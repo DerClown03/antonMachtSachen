@@ -28,7 +28,7 @@
             <p></p>
             {% for k, v in factory_in_diagram.items %}
                 <div class="flex big">
-                    {{k}} {{v}}
+                    {{k|safe}} {{v}}
                 </div>
             {% endfor %}
         </div>      

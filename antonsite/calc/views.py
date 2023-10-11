@@ -107,11 +107,11 @@ class RecipeView(generic.ListView):
                 if index == 0:
                     last_object: bool = True
                     tree_output += "└──"
-                    tree_depth += "   "
+                    tree_depth += "&nbsp;&nbsp;&nbsp;"
                 else:
                     last_object: bool = False
                     tree_output += "├──"
-                    tree_depth += "│  "
+                    tree_depth += "│&nbsp;&nbsp;"
                 self.stack["User"].append(StackObject(item.item_name, needed_machines * item.amount, diagram_tree_output=tree_output, diagram_tree_depth=tree_depth, last=last_object))
         return self.stack
 
