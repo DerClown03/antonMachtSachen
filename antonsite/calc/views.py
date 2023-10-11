@@ -82,10 +82,6 @@ class RecipeView(generic.ListView):
         recipe_id = self.request.GET.get("recipe_id")
         if recipe_id:
             if len(self.stack["User"]) == 0:
-                self.print_dict(self.request.session.get('all_needed_machines'))
-                self.print_dict(self.request.session.get('all_needed_recipes_in_machines'))
-                self.print_dict(self.request.session.get('needed_default_resources'))
-                self.print_dict(self.request.session.get('factory_in_diagram'))
                 return redirect('result')
         return super().render_to_response(context)
     
@@ -94,10 +90,10 @@ class RecipeView(generic.ListView):
         self.request.session['all_needed_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_machines'), chosen_recipe.machine.machine_name_readable, float(needed_machines))
         if initial_recipe:
             self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {self.make_string_readable(item_query)}", float(needed_machines))
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{self.make_string_readable(item_query)} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
+            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{self.make_string_readable(item_query)} in {float(needed_machines)} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
         else:
             self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {searched_item.item_name_readable}", float(needed_machines))
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
+            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {float(needed_machines)} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
         self.request.session.modified = True
         
     def add_to_stack(self, recipe_inputs: list[models.InputModel], last_searched_object: StackObject, needed_machines: Decimal):
@@ -126,11 +122,6 @@ class RecipeView(generic.ListView):
         dictionary[key] += value
         return dictionary
     
-    def print_dict(self, dictionary: dict[str, Decimal]):
-        for k, v in dictionary.items():
-            print(k, v)
-        print()
-
     def get_desired_output(self, searched_output_item: str, chosen_recipe_id) -> models.OutputModel:
         recipe_outputs: list[models.OutputModel] = models.OutputModel.objects.filter(recipe=chosen_recipe_id)
         for output in recipe_outputs:
@@ -145,3 +136,19 @@ class RecipeView(generic.ListView):
 class ResultView(generic.TemplateView):
     template_name = "result_view.html"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.print_dict(self.request.session.get('all_needed_machines'))
+        self.print_dict(self.request.session.get('all_needed_recipes_in_machines'))
+        self.print_dict(self.request.session.get('needed_default_resources'))
+        self.print_dict(self.request.session.get('factory_in_diagram'))
+        context["all_needed_machines"] = self.request.session.get('all_needed_machines')
+        context["all_needed_recipes_in_machines"] = self.request.session.get('all_needed_recipes_in_machines')
+        context["needed_default_resources"] = self.request.session.get('needed_default_resources')
+        context["factory_in_diagram"] = self.request.session.get('factory_in_diagram')
+        return context
+
+    def print_dict(self, dictionary: dict[str, Decimal]):
+        for k, v in dictionary.items():
+            print(k, v)
+        print()
