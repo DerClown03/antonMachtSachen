@@ -150,5 +150,5 @@ class ResultView(generic.TemplateView):
 
     def print_dict(self, dictionary: dict[str, Decimal]):
         for k, v in dictionary.items():
-            print(k, v)
+            print(k.replace('&nbsp;',' '), v)
         print()
