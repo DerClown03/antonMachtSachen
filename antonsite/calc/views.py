@@ -5,7 +5,7 @@ from django.views import generic
 from . import models
 from decimal import Decimal
 from django.urls import reverse_lazy
-import simplejson
+import json
 
 defaultResources: list[str] = [ "limestone", "iron_ore", "copper_ore", "caterium_ore", "coal", "raw_quartz", "sulfur", "bauxit", "uranium", "water", "crude_oil", "nitrogen_gas", "uranium_waste" ]
 
@@ -33,7 +33,7 @@ class StackObject:
     def __init__(self, name: str, amount: Decimal, diagram_tree_output: str = "", diagram_tree_depth: str = "", first: bool = False, last: bool = False) -> None:
         self.item_name: str = name
         self.item_name_readable: str = self.make_string_readable(name)
-        self.needed_item_amount: Decimal = amount
+        self.needed_item_amount: float = amount
         self.diagram_tree_output: str = diagram_tree_output
         self.diagram_tree_depth: str = diagram_tree_depth
         self.first_object: bool = first
@@ -71,6 +71,7 @@ class RecipeView(generic.ListView):
             output_amount: Decimal = self.get_desired_output(item_query, recipe_id).amount
             needed_machines = amount_query / output_amount
             self.stack = self.add_to_stack(recipe_inputs, current_searched_item, needed_machines)
+            print(json.dumps(self.stack_to_session_dict(self.stack["User"]), indent=4))
             chosen_recipe: models.RecipeModel = models.RecipeModel.objects.filter(pk=recipe_id)[0]
             self.save_current_factory_status(current_searched_item, chosen_recipe, needed_machines, item_query, output_amount, initial_recipe)
             if len(self.stack["User"]) == 0:
@@ -132,6 +133,19 @@ class RecipeView(generic.ListView):
     def make_string_readable(self, item_name: str):
         return item_name.replace('_', ' ').title()
 
+    def stack_to_session_dict(self, stack: list[StackObject]) -> dict[int, dict[str, str]]:
+        session_dict: dict[int, dict[str, str]] = {}
+        for index, stack_object in enumerate(stack):
+            session_dict[index] = {
+                "item_name": stack_object.item_name,
+                "item_name_readable": stack_object.item_name_readable,
+                "needed_item_amount": float(stack_object.needed_item_amount),
+                "diagram_tree_output": stack_object.diagram_tree_output,
+                "diagram_tree_depth": stack_object.diagram_tree_depth,
+                "first_object": stack_object.first_object,
+                "last_object": stack_object.last_object,
+            }
+        return session_dict
 
 class ResultView(generic.TemplateView):
     template_name = "result_view.html"
