@@ -91,13 +91,13 @@ class RecipeView(generic.ListView):
     
     def save_current_factory_status(self, searched_item: StackObject, chosen_recipe: models.RecipeModel, needed_machines, item_query: str, output_ampunt: Decimal, initial_recipe: bool) -> None:
 
-        self.request.session['all_needed_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_machines'), chosen_recipe.machine.machine_name_readable, simplejson.dumps(Decimal(needed_machines)))
+        self.request.session['all_needed_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_machines'), chosen_recipe.machine.machine_name_readable, float(needed_machines))
         if initial_recipe:
-            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {self.make_string_readable(item_query)}", simplejson.dumps(Decimal(needed_machines)))
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{self.make_string_readable(item_query)} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", simplejson.dumps(Decimal(needed_machines * output_ampunt)))
+            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {self.make_string_readable(item_query)}", float(needed_machines))
+            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{self.make_string_readable(item_query)} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
         else:
-            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {searched_item.item_name_readable}", simplejson.dumps(Decimal(needed_machines)))
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", simplejson.dumps(Decimal(needed_machines * output_ampunt)))
+            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {searched_item.item_name_readable}", float(needed_machines))
+            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {needed_machines} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
         self.request.session.modified = True
         
     def add_to_stack(self, recipe_inputs: list[models.InputModel], last_searched_object: StackObject, needed_machines: Decimal):
@@ -105,7 +105,7 @@ class RecipeView(generic.ListView):
             tree_depth: str = last_searched_object.diagram_tree_depth
             tree_output: str = tree_depth
             if item.item_name in defaultResources:
-                self.request.session['needed_default_resources']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('needed_default_resources'), item.item_name_readable, simplejson.dumps(Decimal(item.amount * needed_machines)))
+                self.request.session['needed_default_resources']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('needed_default_resources'), item.item_name_readable, float(item.amount * needed_machines))
                 continue
             else:
                 if index == 0:
