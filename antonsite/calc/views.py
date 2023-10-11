@@ -26,6 +26,7 @@ class ItemView(generic.ListView):
         amount_query = self.request.POST.get("amount_query")
         self.request.session['item_query'] = item_query
         self.request.session['amount_query'] = amount_query
+        self.request.session['stack'] = []
         return redirect("query_set")
     
 
@@ -46,65 +47,68 @@ class StackObject:
 class RecipeView(generic.ListView):
     model = models.RecipeModel
     template_name = "detail_view.html"
-    stack: dict[str, list[StackObject]] = {"User": []}
+    #stack = []
 
     def get_queryset(self):
         recipe_id = self.request.GET.get("recipe_id")
         recipe_inputs: models.InputModel = models.InputModel.objects.filter(recipe=recipe_id)
-        if self.stack == {"User": []}:
-            self.request.session['all_needed_machines']: dict[str, Decimal] = {}
-            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = {}
-            self.request.session['needed_default_resources']: dict[str, Decimal] = {}
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = {}
+        self.stack = []
+        self.stack = self.session_dict_to_stack(self.request.session.get('stack'))
+        if self.stack == []:
+            self.request.session['all_needed_machines']: dict[str, float] = {}
+            self.request.session['all_needed_recipes_in_machines']: dict[str, float] = {}
+            self.request.session['needed_default_resources']: dict[str, float] = {}
+            self.request.session['factory_in_diagram']: dict[str, float] = {}
             initial_recipe = True
             item_query = self.request.session.get('item_query')
-            amount_query = Decimal(self.request.session.get('amount_query'))
+            amount_query = float(self.request.session.get('amount_query'))
             current_searched_item = StackObject(item_query, amount_query)
             self.request.session.modified = True
         else:
             initial_recipe = False
-            current_searched_item: StackObject = self.stack["User"][-1]
+            current_searched_item: StackObject = self.stack[-1]
             item_query = current_searched_item.item_name
             amount_query = current_searched_item.needed_item_amount
-            self.stack["User"].pop()
+            self.stack.pop()
         if recipe_id:
-            output_amount: Decimal = self.get_desired_output(item_query, recipe_id).amount
-            needed_machines = amount_query / output_amount
+            print("####################################################")
+            output_amount: float = self.get_desired_output(item_query, recipe_id).amount
+            needed_machines = float(amount_query) / float(output_amount)
             self.stack = self.add_to_stack(recipe_inputs, current_searched_item, needed_machines)
-            session_dict = self.stack_to_session_dict(self.stack["User"])
-            self.stack = self.session_dict_to_stack(session_dict)
-            print(json.dumps(session_dict, indent=4))
+            print(json.dumps(self.request.session.get('stack'), indent=4))
             chosen_recipe: models.RecipeModel = models.RecipeModel.objects.filter(pk=recipe_id)[0]
             self.save_current_factory_status(current_searched_item, chosen_recipe, needed_machines, item_query, output_amount, initial_recipe)
-            if len(self.stack["User"]) == 0:
+            if len(self.stack) == 0:
                 return None
-            return models.RecipeModel.objects.filter(recipe_output_items__item_name=self.stack["User"][-1].item_name).order_by('-normal_recipe')
+            print(json.dumps(self.stack_to_session_dict(self.stack), indent=4))
+            self.request.session['stack'] = self.stack_to_session_dict(self.stack)
+            return models.RecipeModel.objects.filter(recipe_output_items__item_name=self.stack[-1].item_name).order_by('-normal_recipe')
         return models.RecipeModel.objects.filter(recipe_output_items__item_name=item_query).order_by('-normal_recipe')
 
     def render_to_response(self, context):
         recipe_id = self.request.GET.get("recipe_id")
         if recipe_id:
-            if len(self.stack["User"]) == 0:
+            if len(self.stack) == 0:
                 return redirect('result')
         return super().render_to_response(context)
     
-    def save_current_factory_status(self, searched_item: StackObject, chosen_recipe: models.RecipeModel, needed_machines, item_query: str, output_ampunt: Decimal, initial_recipe: bool) -> None:
+    def save_current_factory_status(self, searched_item: StackObject, chosen_recipe: models.RecipeModel, needed_machines, item_query: str, output_ampunt: float, initial_recipe: bool) -> None:
 
-        self.request.session['all_needed_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_machines'), chosen_recipe.machine.machine_name_readable, float(needed_machines))
+        self.request.session['all_needed_machines']: dict[str, float] = self.add_or_save_to_dict(self.request.session.get('all_needed_machines'), chosen_recipe.machine.machine_name_readable, float(needed_machines))
         if initial_recipe:
-            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {self.make_string_readable(item_query)}", float(needed_machines))
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{self.make_string_readable(item_query)} in {float(needed_machines)} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
+            self.request.session['all_needed_recipes_in_machines']: dict[str, float] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {self.make_string_readable(item_query)}", float(needed_machines))
+            self.request.session['factory_in_diagram']: dict[str, float] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{self.make_string_readable(item_query)} in {float(needed_machines)} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
         else:
-            self.request.session['all_needed_recipes_in_machines']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {searched_item.item_name_readable}", float(needed_machines))
-            self.request.session['factory_in_diagram']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {float(needed_machines)} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
+            self.request.session['all_needed_recipes_in_machines']: dict[str, float] = self.add_or_save_to_dict(self.request.session.get('all_needed_recipes_in_machines'), f"{chosen_recipe.machine.machine_name_readable} for {searched_item.item_name_readable}", float(needed_machines))
+            self.request.session['factory_in_diagram']: dict[str, float] = self.add_or_save_to_dict(self.request.session.get('factory_in_diagram'), f"{searched_item.diagram_tree_output}{searched_item.item_name_readable} in {float(needed_machines)} {chosen_recipe.machine.machine_name_readable}", float(needed_machines * output_ampunt))
         self.request.session.modified = True
         
-    def add_to_stack(self, recipe_inputs: list[models.InputModel], last_searched_object: StackObject, needed_machines: Decimal):
+    def add_to_stack(self, recipe_inputs: list[models.InputModel], last_searched_object: StackObject, needed_machines: float):
         for index, item in enumerate(recipe_inputs):
             tree_depth: str = last_searched_object.diagram_tree_depth
             tree_output: str = tree_depth
             if item.item_name in defaultResources:
-                self.request.session['needed_default_resources']: dict[str, Decimal] = self.add_or_save_to_dict(self.request.session.get('needed_default_resources'), item.item_name_readable, float(item.amount * needed_machines))
+                self.request.session['needed_default_resources']: dict[str, float] = self.add_or_save_to_dict(self.request.session.get('needed_default_resources'), item.item_name_readable, float(item.amount * needed_machines))
                 continue
             else:
                 if index == 0:
@@ -115,10 +119,10 @@ class RecipeView(generic.ListView):
                     last_object: bool = False
                     tree_output += "├─"
                     tree_depth += "│&nbsp;&nbsp;&nbsp;&nbsp;"
-                self.stack["User"].append(StackObject(item.item_name, needed_machines * item.amount, diagram_tree_output=tree_output, diagram_tree_depth=tree_depth, last=last_object))
+                self.stack.append(StackObject(item.item_name, needed_machines * item.amount, diagram_tree_output=tree_output, diagram_tree_depth=tree_depth, last=last_object))
         return self.stack
 
-    def add_or_save_to_dict(self, dictionary: dict[str, Decimal], key: str, value: str) -> dict[str, Decimal]:
+    def add_or_save_to_dict(self, dictionary: dict[str, float], key: str, value: str) -> dict[str, float]:
         if dictionary.get(key) == None:
             dictionary[key] = value
             return dictionary
@@ -135,10 +139,13 @@ class RecipeView(generic.ListView):
     def make_string_readable(self, item_name: str):
         return item_name.replace('_', ' ').title()
 
-    def session_dict_to_stack(self, session_dict: dict[int, dict[str, str]]) -> dict[str, list[StackObject]]:
-        stack: dict[str, list[StackObject]] = {"User": []}
+    def session_dict_to_stack(self, session_dict: dict[int, dict[str, str]]) -> list[StackObject]:
+        print("YYYYYYYYYYYYYYYYYYYYYYYYYY")
+        print(json.dumps(session_dict, indent=4))
+        stack: list[StackObject] = []
         for index in range(len(session_dict)):
-            stack["User"].append(StackObject(
+            index = str(index)
+            stack.append(StackObject(
                 name=session_dict[index]["item_name"],
                 amount=float(session_dict[index]["needed_item_amount"]),
                 diagram_tree_output=session_dict[index]["diagram_tree_output"],
@@ -178,7 +185,7 @@ class ResultView(generic.TemplateView):
         context["factory_in_diagram"] = self.request.session.get('factory_in_diagram')
         return context
 
-    def print_dict(self, dictionary: dict[str, Decimal]):
+    def print_dict(self, dictionary: dict[str, float]):
         for k, v in dictionary.items():
             print(k.replace('&nbsp;',' '), v)
         print()

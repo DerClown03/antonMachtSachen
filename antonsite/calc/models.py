@@ -23,11 +23,11 @@ class InputModel(models.Model):
     recipe = models.ForeignKey(RecipeModel, on_delete=models.CASCADE, related_name="recipe_input_items")
     item_name = models.CharField(max_length=50)
     item_name_readable = models.CharField(max_length=50)
-    amount = models.DecimalField(decimal_places=10, max_digits=20)
+    amount = models.FloatField(max_length=20)
 
 
 class OutputModel(models.Model):
     recipe = models.ForeignKey(RecipeModel, on_delete=models.CASCADE, related_name="recipe_output_items")
     item_name = models.CharField(max_length=50)
     item_name_readable = models.CharField(max_length=50)
-    amount = models.DecimalField(decimal_places=10, max_digits=20)
+    amount = models.FloatField(max_length=20)
