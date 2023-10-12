@@ -16,7 +16,7 @@
 1, 1, i, steel_ingot, 30, o, steel_pipe, 20, n
 1, 1, i, wood, 15, o, coal, 150, a
 1, 1, i, biomass, 37.5, o, coal, 45, a
-1, 1, i, aluminium_ingot, 60, o, empty_fluid_tank, 60, n
+1, 1, i, aluminum_ingot, 60, o, empty_fluid_tank, 60, n
 1, 1, i, copper_ingot, 300, o, copper_powder, 50, n
 1, 1, i, iron_ingot, 12.5, o, screw, 50, a
 1, 1, i, steel_beam, 5, o, screw, 260, a

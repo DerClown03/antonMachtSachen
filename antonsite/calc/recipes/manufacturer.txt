@@ -16,7 +16,7 @@
 4, 1, i, computer, 3.6, electromagnetic_control_rod, 2.4, battery, 24, wire, 54, o, supercomputer, 2.4, a
 3, 1, i, encased_uranium_cell, 20, encased_industrial_beam, 1.2, electromagnetic_control_rod, 2, o, uranium_fuel_rod, 0.4, n
 3, 1, i, versatile_framework, 2.5, electromagnetic_control_rod, 1, battery, 5, o, magnetic_field_generator, 1, n
-4, 1, i, motor, 7.5, pressure_conversion_cube, 1.875, packed_nitrogen_gas, 45, stator, 15, o, turbo_motor, 3.75, a
+4, 1, i, motor, 7.5, pressure_conversion_cube, 1.875, packaged_nitrogen_gas, 45, stator, 15, o, turbo_motor, 3.75, a
 3, 1, i, steel_beam, 2, steel_pipe, 8, crystal_oscillator, 0.5, o, beacon, 10, a
 3, 1, i, circuit_board, 26.25, quickwire, 105, rubber, 45, o, computer, 3.75, a
 3, 1, i, quartz_crystal, 18.75, rubber, 13.125, ai_limiter, 1.875, o, crystal_oscillator, 1.875, a

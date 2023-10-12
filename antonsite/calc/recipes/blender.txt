@@ -8,5 +8,5 @@
 2, 1, i, heavy_oil_residue, 50, water, 100, o, fuel, 100, a
 4, 2, i, uranium, 25, uranium_waste, 25, nitric_acid, 15, sulfuric_acid, 25, o, non_fissile_uranium, 100, water, 40, a
 4, 1, i, heavy_modular_frame, 3, aluminum_ingot, 150, nitric_acid, 24, fuel, 30, o, fused_modular_frame, 3, a
-4, 2, i, bauxite, 150, coal, 100, sulfuric_acid, 50, water, 60, o, aluminum_scrap, 300, water, 50, a
+4, 2, i, bauxit, 150, coal, 100, sulfuric_acid, 50, water, 60, o, aluminum_scrap, 300, water, 50, a
 4, 1, i, fuel, 15, heavy_oil_residue, 30, sulfur, 22.5, petroleum_coke, 22.5, o, turbofuel, 45, a
