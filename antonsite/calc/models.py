@@ -22,6 +22,7 @@ class RecipeModel(models.Model):
 
 class InputModel(models.Model):
     recipe = models.ForeignKey(RecipeModel, on_delete=models.CASCADE, related_name="recipe_input_items")
+    item = models.ForeignKey(ItemModel, on_delete=models.CASCADE, related_name="item_input_items")
     item_name = models.CharField(max_length=50)
     item_name_readable = models.CharField(max_length=50)
     amount = models.FloatField(max_length=20)
@@ -29,6 +30,7 @@ class InputModel(models.Model):
 
 class OutputModel(models.Model):
     recipe = models.ForeignKey(RecipeModel, on_delete=models.CASCADE, related_name="recipe_output_items")
+    item = models.ForeignKey(ItemModel, on_delete=models.CASCADE, related_name="item_output_items")
     item_name = models.CharField(max_length=50)
     item_name_readable = models.CharField(max_length=50)
     amount = models.FloatField(max_length=20)

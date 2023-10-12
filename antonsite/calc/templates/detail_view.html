@@ -12,10 +12,10 @@
                         <ul>
                             <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
                             {% for input in i.recipe_input_items.all %}
-                             <li>Input amount: {{input.item_name}} {{input.amount}}/min</li>
+                             <li>Input amount: {{input.item_name_readable}} {{input.amount}}/min</li>
                              {%endfor%}
                              {% for output in i.recipe_output_items.all %}
-                             <li>Output amount: {{output.item_name}} {{output.amount}}/min</li>
+                             <li>Output amount: {{output.item_name_readable}} {{output.amount}}/min</li>
                              {%endfor%}
                             <li>{{i.normal_recipe}}</li>
                         </ul>
