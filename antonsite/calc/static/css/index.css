@@ -41,10 +41,15 @@
 .cols .col1 input{
     background-color: transparent;
     color: white;
-    font-size: 4em;
+    font-size: 3.6em;
     border-style: none;
 }
 
 .background {
     background-color: black;
+}
+
+.image-size {
+    height: 2em;
+    width: 2em;
 }
