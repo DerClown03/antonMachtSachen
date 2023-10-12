@@ -5,17 +5,17 @@
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
     </head>
     <body>
-        <div class="flex"> 
+        <div class="flex big center"> 
             {% for i in object_list %}
                 <div>
                     <form>
                         <ul>
                             <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
                             {% for input in i.recipe_input_items.all %}
-                             <li>Input amount: {{input.item_name_readable}} <img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min</li>
+                             <li class="center">Input amount:   <img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min</li>
                              {%endfor%}
                              {% for output in i.recipe_output_items.all %}
-                             <li>Output amount: {{output.item_name_readable}} <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min</li>
+                             <li class="center">Output amount:  <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min</li>
                              {%endfor%}
                             <li>{{i.normal_recipe}}</li>
                         </ul>

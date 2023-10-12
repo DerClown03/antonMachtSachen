@@ -52,4 +52,12 @@
 .image-size {
     height: 2em;
     width: 2em;
+    margin-left: 1em;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
 }
