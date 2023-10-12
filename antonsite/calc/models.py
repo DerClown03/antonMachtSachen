@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 class ItemModel(models.Model):
+    category = models.CharField(max_length=50)
     item_name = models.CharField(max_length=50)
     item_img = models.ImageField(upload_to="static/images/items")
 

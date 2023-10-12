@@ -16,10 +16,14 @@ class ItemView(generic.ListView):
     paginate_by = 16
 
     def get_queryset(self):
+        category = self.request.GET.get("category")
         search_query = self.request.GET.get("search_query")
+        qs = models.ItemModel.objects.filter(category="Ingots")
+        if category:
+            qs = models.ItemModel.objects.filter(category=category)
         if search_query:
-            return models.ItemModel.objects.filter(item_name__icontains=search_query)
-        return models.ItemModel.objects.all()
+            qs = models.ItemModel.objects.filter(item_name__icontains=search_query)
+        return qs
 
     def post(self, request, *args, **kwargs):
         item_query = self.request.POST.get("item_name")

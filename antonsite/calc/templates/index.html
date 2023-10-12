@@ -4,14 +4,85 @@
     <head>
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
     </head>
-    <body>
-        <div class="flex">
+    <body class="background">
+        <div class="search">
             <form action="">
                 <input class="searchbar" name="search_query" placeholder="Suchen..."/>
                 <input type="submit" value="Suchen"/>
             </form>
-            {% for i in object_list %}
+        </div>
+        <div class="cols">
+            <div class="col1">
+                
             <div>
+                <form action="">
+                    <input type="submit" name="category" value="Ingots">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Minerals">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Liquids">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Standard Parts">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Industrial Parts">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Electronics">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Communications">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Containers">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Fuels">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Consumed">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Ammos">
+                </form>
+            </div><div>
+                <form action="">
+                    <input type="submit" name="category" value="Nuclear">
+                </form>
+            </div>
+            <div>
+                <form action="">
+                    <input type="submit" name="category" value="Special">
+                </form>
+            </div>
+            </div>
+            <div class="col">
+                <div class="flex">
+            {% for i in object_list %}
+                
                 <form method="POST">
                     {% csrf_token %}
                     <ul>
@@ -20,8 +91,10 @@
                         <input type="hidden" name="item_name" value="{{i.item_name}}">
                     </ul>
                 </form>
-            </div>
+            
             {% endfor %}
+        </div>
+        </div>
             {% if page_obj.has_previous %}
 <a href="{% url 'index'%}?page={{page_obj.previous_page_number}}">Vorherige Seite</a>
  {% endif %}
