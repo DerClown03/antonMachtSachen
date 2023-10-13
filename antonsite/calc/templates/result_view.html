@@ -5,32 +5,46 @@
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
     </head>
     <body>
-        <a class="big" href="{% url "index" %}">Home page</a>
-        <div >
-            <p></p>
-            {% for k, v in all_needed_machines.items %}
-                <div class="flex big">
-                    {{k}} {{v}}
+        <main>
+            <div class="header-result">
+                <h1>Results</h1>
+            </div>
+            <div class="main-result">
+                <h2>Diagram</h2>
+                <div class="main-result-div-green">
+                    {% for k, v in factory_in_diagram.items %}
+                    <div>
+                        {{k|safe}} {{v}}
+                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <p></p>
-            {% for k, v in all_needed_recipes_in_machines.items %}
-                <div class="flex big">
-                    {{k}} {{v}}
+                <h2>All Recipes</h2>
+                <div class="main-result-div">
+                    {% for k, v in all_needed_recipes_in_machines.items %}
+                    <div>
+                        {{k|safe}} {{v}}
+                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <p></p>
-            {% for k, v in needed_default_resources.items %}
-                <div class="flex big">
-                    {{k}} {{v}}
+                <h2>Resources</h2>
+                <div class="main-result-div">
+                    {% for k, v in needed_default_resources.items %}
+                    <div>
+                        {{k|safe}} {{v}}
+                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <p></p>
-            {% for k, v in factory_in_diagram.items %}
-                <div class="flex big">
-                    {{k|safe}} {{v}}
+                <h2>All Machines</h2>
+                <div class="main-result-div">
+                    {% for k, v in all_needed_machines.items %}
+                    <div>
+                        {{k|safe}} {{v}}
+                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>      
+            </div>
+        </main>
+        
+        <footer class="footer"><a  href="{% url "index" %}">Back</a></footer>
     </body>
 </html>

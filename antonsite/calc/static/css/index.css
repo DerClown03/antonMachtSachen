@@ -3,8 +3,28 @@
     src: url("fonts/CascadiaMono.ttf") format("truetype");
 }
 
-.body {
-    
+html, body {
+    margin: 0;
+    background-color: #333333;
+}
+
+main {
+    min-height: calc(100vh - 9rem);
+  }
+  
+footer {
+    height: 6rem;
+    background-color: #222222;
+    padding-top: 3em;
+    padding-left: 4em;
+  }
+
+footer a {
+    text-decoration: none;
+    padding-top: 2em;
+    color: white;
+    font-size: 3em;
+    font-family: Arial;
 }
 
 .cols {
@@ -28,6 +48,13 @@
     padding: 0.5em;
 }
 
+.cols .col1 input {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 3em;
+}
+
 .center {
     justify-content: center;
 }
@@ -36,20 +63,18 @@
 
 .search {
     background-color: #151515;
-    padding-left: 1em;
-    padding-bottom: 0.2em;
     color: gray;
-    margin-bottom: -1.4em;
+}
+
+.search h1 {
     font-family: Arial;
+    padding: 0.4em;
+    margin: 0;
 }
 
 .logo {
-    width: 30em;
-    height: 15em;
-}
-
-.col1 div:first-child {
-    margin: -4em 0 -2em 0;
+    width: 25em;
+    height: 12em;
 }
 
 .col1 input {
@@ -82,13 +107,13 @@
 /* detail */
 
 .chose-recipe {
-    background-color: rgb(75, 75, 75);
+    background-color: #333333;
     color: white;
     font-family: Arial;
 }
 
 .dark-background {
-    background-color: rgb(39, 36, 36);
+    background-color: #222222;
     padding: 0.5em 0 1em 1em;
 }
 
@@ -103,39 +128,54 @@
 .chose-recipe form {
     display: flex;
     align-items: center;
-    margin: 2em;
     padding-left: 1em;
     padding-right: 1em;
+    margin: 1em;
+    margin-bottom: 0;
     justify-content: space-between;
 }
 
 .chose-recipe form:hover {
     background-color: rgb(39, 36, 36);
-}
-
-
-/* result */
-
-.big {
-    font-family: "CascadiaMono";
-    font-size: 2rem;
-}
-
-
-
-.cols .col1 input{
-    background-color: transparent;
-    color: white;
-    font-size: 3.6em;
-    border-style: none;
-}
-
-.background {
-    background-color: black;
+    border-radius: 10px;
 }
 
 .image-size {
     height: 2em;
     width: 2em;
-    margin-left: 1em;
 }
+
+
+
+/* result */
+
+.header-result {
+    background-color: #222222;
+    padding: 1em;
+    color: white;
+    font-family: Arial;
+}
+
+.main-result {
+    background-color: #333333;
+    padding: 1em;
+    color: white;
+    font-family: Arial;
+}
+
+.main-result-div {
+    background-color: black;
+    color: white;
+    padding: 1em;
+    font-family: "CascadiaMono";
+    border-radius: 10px;
+}
+
+.main-result-div-green {
+    background-color: black;
+    color: rgb(46, 150, 46);
+    padding: 1em;
+    font-family: "CascadiaMono";
+    border-radius: 10px;
+}
+
