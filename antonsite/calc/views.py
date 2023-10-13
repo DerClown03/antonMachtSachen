@@ -17,12 +17,9 @@ class ItemView(generic.ListView):
 
     def get_queryset(self):
         category = self.request.GET.get("category")
-        search_query = self.request.GET.get("search_query")
         qs = models.ItemModel.objects.filter(category="Ingots")
         if category:
             qs = models.ItemModel.objects.filter(category=category)
-        if search_query:
-            qs = models.ItemModel.objects.filter(item_name__icontains=search_query)
         return qs.order_by("item_name")
 
     def post(self, request, *args, **kwargs):
