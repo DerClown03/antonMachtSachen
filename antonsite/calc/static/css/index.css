@@ -3,6 +3,10 @@
     src: url("fonts/CascadiaMono.ttf") format("truetype");
 }
 
+.body {
+    
+}
+
 .cols {
     width: 100%;
     display: flex;
@@ -14,13 +18,13 @@
   
 .cols .col {
     flex: 1;
-    background-color: rgb(39, 36, 36);
+    background-color: #222222;
     padding: 2em;
 }
 
 .cols .col1 {
     flex: 0;
-    background-color: rgb(59, 59, 59);
+    background-color: #333333;
     padding: 0.5em;
 }
 
@@ -31,7 +35,7 @@
 /* index */
 
 .search {
-    background-color: rgb(24, 24, 24);
+    background-color: #151515;
     padding-left: 1em;
     padding-bottom: 0.2em;
     color: gray;
@@ -53,12 +57,12 @@
 }
 
 .col1 div:not(:first-child):hover {
-    background-color: rgb(78, 78, 78);
+    background-color: #222222;
     border-radius: 10px;
 }
 
 .recipes:hover {
-    background-color: rgb(78, 78, 78);
+    background-color: #333333;
     border-radius: 10px;
 }
 
@@ -80,6 +84,7 @@
 .chose-recipe {
     background-color: rgb(75, 75, 75);
     color: white;
+    font-family: Arial;
 }
 
 .dark-background {
