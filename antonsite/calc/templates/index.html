@@ -116,11 +116,12 @@
             </div>
             <div class="col">
                 <div class="flex">
-                    <button class="input-submit" hx-get="{% url 'submit_modal' %}" hx-target="#dialog">test
-                    </button>
+                    <button hx-get="{% url 'submit_modal' %}" hx-target="#dialog">
+                        Add a movie
+                      </button>
                     {% for i in object_list %}
                     <div class="recipes">
-                        <button class="input-submit" hx-get="{% url 'submit_modal' %}" hx-target="#dialog">
+                        <button hx-post="{% url 'submit_modal' %}" hx-target="#dialog">
                             <div><image src="{{i.item_img.url}}" alt="{{i.item_name}}"></div>
                             <div class="center">{{i.item_name_readable}}</div>
                         </button>
@@ -133,13 +134,6 @@
             <div id="dialog" class="modal-dialog" hx-target="this"></div>
         </div>
           <script>
-            import * as htmx from 'htmx.org';
-
-            import * as bootstrap from "bootstrap";
-
-            (window as any).htmx = htmx;
-
-
             const modal = new bootstrap.Modal(document.getElementById("modal"))
 
             htmx.on("htmx:afterSwap", (e) => {
