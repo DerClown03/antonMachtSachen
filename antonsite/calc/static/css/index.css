@@ -117,6 +117,10 @@ footer a {
     font-size: 1.3em;
 }
 
+.input-submit {
+    text-decoration: none;
+}
+
 /* detail */
 
 .chose-recipe {

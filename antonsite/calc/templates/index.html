@@ -122,7 +122,7 @@
                             {% csrf_token %}
                             <div><image src="{{i.item_img.url}}" alt="{{i.item_name}}"></div>
                             <div class="center">{{i.item_name_readable}}</div>
-                            <div><input type="number" placeholder="items/min" name="amount_query"/><input type="submit"></div>
+                            <div><input type="number" placeholder="items/min" name="amount_query"/><button class="input-submit" type="submit">Submit</button></div>
                             <div><input type="hidden" name="item_name" value="{{i.item_name}}"></div>
                         </form>
                     </div>
