@@ -52,7 +52,7 @@ footer a {
     background-color: transparent;
     color: white;
     border: none;
-    font-size: 3em;
+    font-size: 2.6em;
 }
 
 .center {
@@ -73,12 +73,15 @@ footer a {
 }
 
 .logo {
-    width: 25em;
-    height: 12em;
+    width: 22em;
+    height: 11em;
+    margin-left: 0.4em;
+    margin-right: 0.4em;
 }
 
 .col1 input {
     margin-left: 0.2em;
+    margin-top: 0.3em;
 }
 
 .col1 div:not(:first-child):hover {
@@ -94,6 +97,7 @@ footer a {
 .flex {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .flex div {
@@ -101,7 +105,16 @@ footer a {
 }
 
 .recipes {
+    display: flex;
+    justify-content: center;
     color: white;
+    
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    font-size: 1.3em;
 }
 
 /* detail */
