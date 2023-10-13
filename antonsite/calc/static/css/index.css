@@ -98,7 +98,6 @@ footer a {
 .flex {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .flex div {
