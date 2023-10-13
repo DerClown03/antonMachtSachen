@@ -1,8 +1,12 @@
+@font-face {
+    font-family: "CascadiaMono";
+    src: url("fonts/CascadiaMono.ttf") format("truetype");
+}
+
 .flex {
     display: flex;
     flex-wrap: wrap;
     font-family: Arial;
-    
 }
 
 .search {
@@ -20,6 +24,7 @@
 }
 
 .big {
+    font-family: "CascadiaMono";
     font-size: 2rem;
 }
 
@@ -29,16 +34,16 @@
     flex-direction: row;
     background-color: none;
     font-family: Arial;
-  }
+}
   
 .cols .col {
     flex: 1;
-  }
+}
 
 .cols .col1 {
     flex: 0.5;
     background-color: gray;
-  }
+}
 
 .cols .col1 input{
     background-color: transparent;
