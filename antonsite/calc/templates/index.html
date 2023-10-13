@@ -3,6 +3,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
+        
     </head>
     <body>
         <div class="search">
@@ -116,15 +117,16 @@
             </div>
             <div class="col">
                 <div class="flex">
-                    <button hx-get="{% url 'submit_modal' %}" hx-target="#dialog">
-                        Add a movie
-                      </button>
+                    
                     {% for i in object_list %}
                     <div class="recipes">
-                        <button hx-post="{% url 'submit_modal' %}" hx-target="#dialog">
+                        <form action="" method="POST">
+                            {% csrf_token %}
                             <div><image src="{{i.item_img.url}}" alt="{{i.item_name}}"></div>
                             <div class="center">{{i.item_name_readable}}</div>
-                        </button>
+                            <div><input type="number" placeholder="items/min" name="amount_query"/><button class="input-submit" type="submit">Submit</button></div>
+                            <div><input type="hidden" name="item_name" value="{{i.item_name}}"></div>
+                        </form>
                     </div>
                     {% endfor %}
                 </div>
@@ -134,6 +136,7 @@
             <div id="dialog" class="modal-dialog" hx-target="this"></div>
         </div>
           <script>
+
             const modal = new bootstrap.Modal(document.getElementById("modal"))
 
             htmx.on("htmx:afterSwap", (e) => {

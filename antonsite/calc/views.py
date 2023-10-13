@@ -22,6 +22,13 @@ class ItemView(generic.ListView):
             qs = models.ItemModel.objects.filter(category=category)
         return qs.order_by("item_name")
 
+    def post(self, request, *args, **kwargs):
+        item_query = self.request.POST.get("item_name")
+        amount_query = self.request.POST.get("amount_query")
+        self.request.session['item_query'] = item_query
+        self.request.session['amount_query'] = amount_query
+        self.request.session['stack'] = []
+        return redirect("query_set")
     
 class StackObject:
     def __init__(self, name: str, amount: float, diagram_tree_output: str = "", diagram_tree_depth: str = "", first: bool = False, last: bool = False) -> None:
