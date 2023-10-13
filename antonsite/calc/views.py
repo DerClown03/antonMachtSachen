@@ -23,7 +23,7 @@ class ItemView(generic.ListView):
             qs = models.ItemModel.objects.filter(category=category)
         if search_query:
             qs = models.ItemModel.objects.filter(item_name__icontains=search_query)
-        return qs
+        return qs.order_by("item_name")
 
     def post(self, request, *args, **kwargs):
         item_query = self.request.POST.get("item_name")
@@ -143,8 +143,6 @@ class RecipeView(generic.ListView):
         return item_name.replace('_', ' ').title()
 
     def session_dict_to_stack(self, session_dict: dict[int, dict[str, str]]) -> list[StackObject]:
-        print("YYYYYYYYYYYYYYYYYYYYYYYYYY")
-        print(json.dumps(session_dict, indent=4))
         stack: list[StackObject] = []
         for index in range(len(session_dict)):
             index = str(index)
