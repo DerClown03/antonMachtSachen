@@ -75,7 +75,6 @@ class RecipeView(generic.ListView):
             amount_query = current_searched_item.needed_item_amount
             self.stack.pop()
         if recipe_id:
-            print("####################################################")
             output_amount: float = self.get_desired_output(item_query, recipe_id).amount
             needed_machines = float(amount_query) / float(output_amount)
             self.stack = self.add_to_stack(recipe_inputs, current_searched_item, needed_machines)

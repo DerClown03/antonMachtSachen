@@ -3,14 +3,35 @@
     src: url("fonts/CascadiaMono.ttf") format("truetype");
 }
 
-.flex {
+.cols {
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    background-color: transparent;
     font-family: Arial;
+    width: 100%;
+}
+  
+.cols .col {
+    flex: 1;
+    background-color: rgb(39, 36, 36);
+    padding: 2em;
 }
 
+.cols .col1 {
+    flex: 0;
+    background-color: rgb(53, 53, 53);
+    padding: 0.5em;
+}
+
+.center {
+    justify-content: center;
+}
+
+/* index */
+
 .search {
-    background-color: orange;
+    background-color: rgb(24, 24, 24);
     padding: 2em 0em 2em 1em;
 }
 
@@ -19,31 +40,51 @@
     border-style: none;
 }
 
-.flex ul {
-    list-style: none;
+.logo {
+    width: 30em;
+    height: 15em;
 }
+
+.col1 div:first-child {
+    margin: -4em 0 -2em 0;
+}
+
+.col1 input {
+    margin-left: 0.2em;
+}
+
+.col1 div:not(:first-child):hover {
+    background-color: rgb(78, 78, 78);
+    border-radius: 10px;
+}
+
+.recipes:hover {
+    background-color: rgb(78, 78, 78);
+    border-radius: 10px;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+   
+}
+
+.flex div {
+    margin: 1em;
+}
+
+.recipes {
+    color: white;
+}
+
+/* result */
 
 .big {
     font-family: "CascadiaMono";
     font-size: 2rem;
 }
 
-.cols {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    background-color: none;
-    font-family: Arial;
-}
-  
-.cols .col {
-    flex: 1;
-}
 
-.cols .col1 {
-    flex: 0.5;
-    background-color: gray;
-}
 
 .cols .col1 input{
     background-color: transparent;

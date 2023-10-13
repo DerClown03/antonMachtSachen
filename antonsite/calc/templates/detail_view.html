@@ -5,20 +5,25 @@
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
     </head>
     <body>
-        <div class="flex big center"> 
+        <div class="flex"> 
             {% for i in object_list %}
                 <div>
                     <form>
-                        <ul>
-                            <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
-                            {% for input in i.recipe_input_items.all %}
-                             <li class="center">Input amount:   <img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min</li>
-                             {%endfor%}
+                            <div class="flex">
+                                <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
+                            </div>
+                            <div>
+                                {% for input in i.recipe_input_items.all %}
+                                Input amount:<img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min
+                                {%endfor%}
+                            </div>
+                            
+                            <img class="image-size" src="/media/static/images/arrow_black.png">
                              {% for output in i.recipe_output_items.all %}
-                             <li class="center">Output amount:  <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min</li>
+                             Output amount:  <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min
                              {%endfor%}
-                            <li>{{i.normal_recipe}}</li>
-                        </ul>
+                            {{i.normal_recipe}}
+                        
                         <input type="hidden" name="recipe_id" value="{{i.id}}">
                     </form>
                 </div>

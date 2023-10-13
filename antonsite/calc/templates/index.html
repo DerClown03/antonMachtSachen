@@ -4,7 +4,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
     </head>
-    <body class="background">
+    <body>
         <div class="search">
             <form action="">
                 <input class="searchbar" name="search_query" placeholder="Suchen..."/>
@@ -13,7 +13,9 @@
         </div>
         <div class="cols">
             <div class="col1">
-                
+            <div>
+                <img class="logo" src="/media/static/images/fiscit_logo.png" alt="">
+            </div>
             <div>
                 <form action="">
                     <input type="submit" name="category" value="Ingots">
@@ -87,27 +89,19 @@
             </div>
             <div class="col">
                 <div class="flex">
-            {% for i in object_list %}
-                
-                <form method="POST">
-                    {% csrf_token %}
-                    <ul>
-                        <li><input type="image" src="{{i.item_img.url}}" alt="{{i.item_name}}"></li>
-                        <li><input type="number" name="amount_query"/><input type="submit"></li>
-                        <input type="hidden" name="item_name" value="{{i.item_name}}">
-                    </ul>
-                </form>
-            
-            {% endfor %}
-        </div>
-        </div>
-            {% if page_obj.has_previous %}
-<a href="{% url 'index'%}?page={{page_obj.previous_page_number}}">Vorherige Seite</a>
- {% endif %}
-
- {% if page_obj.has_next %}
-<a href="{% url 'index'%}?page={{page_obj.next_page_number}}">Nächste Seite</a>
-{% endif%}
+                    {% for i in object_list %}
+                    <div class="recipes">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div><image src="{{i.item_img.url}}" alt="{{i.item_name}}"></div>
+                            <div class="center">{{i.item_name_readable}}</div>
+                            <div><input type="number" placeholder="items/min" name="amount_query"/><input type="submit"></div>
+                            <div><input type="hidden" name="item_name" value="{{i.item_name}}"></div>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>   
     </body>
 </html>
