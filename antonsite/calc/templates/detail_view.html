@@ -5,29 +5,34 @@
         <link rel="stylesheet" type="text/css" href=" {% static 'css/index.css' %} ">
     </head>
     <body>
-        <div class="flex"> 
-            {% for i in object_list %}
-                <div>
+        <div class="chose-recipe">
+            <div class="dark-background">
+                <h1>
+                    Chose recipe
+                </h1>
+            </div>
+            <div>
+                {% for i in object_list %}  
+                <label>
                     <form>
-                            <div class="flex">
-                                <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
-                            </div>
-                            <div>
-                                {% for input in i.recipe_input_items.all %}
-                                Input amount:<img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min
-                                {%endfor%}
-                            </div>
-                            
-                            <img class="image-size" src="/media/static/images/arrow_black.png">
-                             {% for output in i.recipe_output_items.all %}
-                             Output amount:  <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min
-                             {%endfor%}
+                        <div>
                             {{i.normal_recipe}}
+                            {% for input in i.recipe_input_items.all %}
+                            <img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min
+                            {%endfor%}
+                            <img class="image-size" src="/media/static/images/arrow_black.png">
+                            {% for output in i.recipe_output_items.all %}
+                            <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min
+                            {%endfor%}</div>
                         
+                        <div>
+                            <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
+                        </div> 
                         <input type="hidden" name="recipe_id" value="{{i.id}}">
                     </form>
-                </div>
-            {% endfor %}
+                </label>
+                {% endfor %}
+            </div>
         </div>
     </body>
 </html>
