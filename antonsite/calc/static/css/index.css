@@ -115,6 +115,10 @@ footer a {
     font-size: 1.3em;
 }
 
+.input-amount {
+    
+}
+
 .input-submit {
     text-decoration: none;
 }
@@ -151,6 +155,10 @@ footer a {
     justify-content: space-between;
 }
 
+.chose-recipe label:last-child {
+    margin-bottom: 2em;
+}
+
 .chose-recipe form:hover {
     background-color: rgb(39, 36, 36);
     border-radius: 10px;
@@ -168,6 +176,10 @@ footer a {
 
 .recipe-table tr:nth-child(-n +2) {
     font-size: 2.5em;
+}
+
+.recipe-table tr:last-child {
+    font-size: 1.5em;
 }
 
 .recipe-table td {
