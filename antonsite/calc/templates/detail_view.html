@@ -16,16 +16,33 @@
                     {% for i in object_list %}  
                     <label>
                         <form>
-                            <div>
-                                {{i.normal_recipe}}
-                                {% for input in i.recipe_input_items.all %}
-                                <img class="image-size" src="{{input.item.item_img.url}}"> {{input.amount}}/min
-                                {%endfor%}
-                                <img class="image-size" src="/media/static/images/arrow_black.png">
-                                {% for output in i.recipe_output_items.all %}
-                                <img class="image-size" src="{{output.item.item_img.url}}"> {{output.amount}}/min
-                                {%endfor%}</div>
-                            
+                            <table class="recipe-table">
+                                <tr>
+                                    {% if i.normal_recipe %}
+                                    <th>Normal recipe</th>
+                                    {% else %}
+                                    <th>Alternate recipe</th>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    {% for input in i.recipe_input_items.all %}
+                                    <td><img class="image-size" src="{{input.item.item_img.url}}"></td>
+                                    {%endfor%}
+                                    <td><img class="image-size" src="/media/static/images/arrow_black.png"></td>
+                                    {% for output in i.recipe_output_items.all %}
+                                    <td><img class="image-size" src="{{output.item.item_img.url}}"></td>
+                                    {%endfor%}
+                                </tr>
+                                <tr>
+                                    {% for input in i.recipe_input_items.all %}
+                                    <td>{{input.amount}}/min</td>
+                                    {%endfor%}
+                                    <td></td>
+                                    {% for output in i.recipe_output_items.all %}
+                                    <td>{{output.amount}}/min</td>
+                                    {%endfor%}
+                                </tr>
+                            </table>
                             <div>
                                 <input type="image" src="{{i.machine.machine_img.url}}" alt="{{i.machine.machine_name}}">
                             </div> 

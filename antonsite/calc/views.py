@@ -74,12 +74,10 @@ class RecipeView(generic.ListView):
             output_amount: float = self.get_desired_output(item_query, recipe_id).amount
             needed_machines = float(amount_query) / float(output_amount)
             self.stack = self.add_to_stack(recipe_inputs, current_searched_item, needed_machines)
-            print(json.dumps(self.request.session.get('stack'), indent=4))
             chosen_recipe: models.RecipeModel = models.RecipeModel.objects.filter(pk=recipe_id)[0]
             self.save_current_factory_status(current_searched_item, chosen_recipe, needed_machines, item_query, output_amount, initial_recipe)
             if len(self.stack) == 0:
                 return None
-            print(json.dumps(self.stack_to_session_dict(self.stack), indent=4))
             self.request.session['stack'] = self.stack_to_session_dict(self.stack)
             return models.RecipeModel.objects.filter(recipe_output_items__item_name=self.stack[-1].item_name).order_by('-normal_recipe')
         return models.RecipeModel.objects.filter(recipe_output_items__item_name=item_query).order_by('-normal_recipe')

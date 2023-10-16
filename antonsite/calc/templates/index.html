@@ -132,31 +132,44 @@
                 </div>
             </div>
         </div>
-        <div id="modal" class="modal fade">
-            <div id="dialog" class="modal-dialog" hx-target="this"></div>
+        <button id="myBtn">Open Modal</button>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p>
         </div>
-          <script>
 
-            const modal = new bootstrap.Modal(document.getElementById("modal"))
+        </div>
+        <script>
+                // Get the modal
+            var modal = document.getElementById("myModal");
 
-            htmx.on("htmx:afterSwap", (e) => {
-            // Response targeting #dialog => show the modal
-            // @ts-ignore
-            if (e.detail.target.id == "dialog") {
-                modal.show()
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on the button, open the modal
+            btn.onclick = function() {
+            modal.style.display = "block";
             }
-            })
 
-            htmx.on("htmx:beforeSwap", (e) => {
-                // Empty response targeting #dialog => hide the modal
-                // @ts-ignore
-                if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
-                modal.hide()
-                location.reload();  
-                // @ts-ignore
-                e.detail.shouldSwap = false
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+            modal.style.display = "none";
             }
-            })
-          </script>  
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+            }
+        </script>
     </body>
 </html>
