@@ -117,12 +117,8 @@ footer a {
 
 .input-amount {
     display: flex;
-    
-    justify-content: space-between;
-}
-
-.input-amount:last-child {
-    
+    justify-content: space-evenly;
+    height: 2em;
 }
 
 .input-submit {
