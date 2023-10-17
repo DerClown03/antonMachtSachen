@@ -118,7 +118,6 @@ footer a {
 .input-amount {
     display: flex;
     justify-content: space-evenly;
-    height: 2em;
 }
 
 .input-submit {
